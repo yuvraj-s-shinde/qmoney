@@ -123,20 +123,20 @@ public class PortfolioManagerApplication {
   // make sure its working as expected. use below command to do the same.
   // ./gradlew test --tests PortfolioManagerApplicationTest.testDebugValues
 
-  // public static List<String> debugOutputs() {
+  public static List<String> debugOutputs() {
 
-  // String valueOfArgument0 = "trades.json";
-  // String resultOfResolveFilePathArgs0 =
-  // "/home/crio-user/workspace/yuvraj17188-ME_QMONEY_V2/qmoney/bin/main/trades.json";
-  // String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@5542c4ed";
-  // String functionNameFromTestFileInStackTrace = "mainReadFile";
-  // String lineNumberFromTestFileInStackTrace = "29";
+  String valueOfArgument0 = "trades.json";
+  String resultOfResolveFilePathArgs0 =
+  "/home/crio-user/workspace/yuvraj17188-ME_QMONEY_V2/qmoney/bin/main/trades.json";
+  String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@5542c4ed";
+  String functionNameFromTestFileInStackTrace = "mainReadFile";
+  String lineNumberFromTestFileInStackTrace = "29";
 
 
-  // return Arrays.asList(new String[]{valueOfArgument0, resultOfResolveFilePathArgs0,
-  // toStringOfObjectMapper, functionNameFromTestFileInStackTrace,
-  // lineNumberFromTestFileInStackTrace});
-  // }
+  return Arrays.asList(new String[]{valueOfArgument0, resultOfResolveFilePathArgs0,
+  toStringOfObjectMapper, functionNameFromTestFileInStackTrace,
+  lineNumberFromTestFileInStackTrace});
+  }
 
 
   // Note:

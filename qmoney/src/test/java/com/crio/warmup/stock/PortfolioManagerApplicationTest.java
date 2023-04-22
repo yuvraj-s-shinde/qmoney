@@ -49,11 +49,11 @@ class PortfolioManagerApplicationTest {
 
 
 
-  // @Test
-  // public void testDebugValues() {
-  //   List<String> responses = PortfolioManagerApplication.debugOutputs();
-  //   Assertions.assertTrue(responses.get(0).contains("trades.json"));
-  // }
+  @Test
+  public void testDebugValues() {
+    List<String> responses = PortfolioManagerApplication.debugOutputs();
+    Assertions.assertTrue(responses.get(0).contains("trades.json"));
+  }
 
 }
 
