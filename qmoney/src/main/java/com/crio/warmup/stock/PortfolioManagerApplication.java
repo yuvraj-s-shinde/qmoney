@@ -4,6 +4,8 @@ package com.crio.warmup.stock;
 
 import com.crio.warmup.stock.dto.*;
 import com.crio.warmup.stock.log.UncaughtExceptionHandler;
+import com.crio.warmup.stock.portfolio.PortfolioManager;
+import com.crio.warmup.stock.portfolio.PortfolioManagerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.File;
@@ -200,7 +202,7 @@ public class PortfolioManagerApplication {
   // TODO:
   //  Ensure all tests are passing using below command
   //  ./gradlew test --tests ModuleThreeRefactorTest
-  static Double getOpeningPriceOnStartDate(List<Candle> candles) {
+  public static Double getOpeningPriceOnStartDate(List<Candle> candles) {
     return candles.get(0).getOpen();
   }
 
@@ -279,13 +281,60 @@ public class PortfolioManagerApplication {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // TODO: CRIO_TASK_MODULE_REFACTOR
+  //  Once you are done with the implementation inside PortfolioManagerImpl and
+  //  PortfolioManagerFactory, create PortfolioManager using PortfolioManagerFactory.
+  //  Refer to the code from previous modules to get the List<PortfolioTrades> and endDate, and
+  //  call the newly implemented method in PortfolioManager to calculate the annualized returns.
+
+  // Note:
+  // Remember to confirm that you are getting same results for annualized returns as in Module 3.
+
+  public static List<AnnualizedReturn> mainCalculateReturnsAfterRefactor(String[] args)
+      throws Exception {
+      //  String file = args[0];
+      //  LocalDate endDate = LocalDate.parse(args[1]);
+      //  String contents = readFileAsString(file);
+      //  ObjectMapper objectMapper = getObjectMapper();
+      //  return portfolioManager.calculateAnnualizedReturn(Arrays.asList(portfolioTrades), endDate);
+      List<PortfolioTrade> trades = readTradesFromJson(args[0]);
+      RestTemplate restTemplate = new RestTemplate();
+      PortfolioManager portfolioManager = PortfolioManagerFactory.getPortfolioManager(restTemplate);
+      List<AnnualizedReturn> annualizedReturns =  portfolioManager.calculateAnnualizedReturn(trades,
+      LocalDate.parse(args[1]));
+      // Collections.sort(annualizedReturns, new Comparator<AnnualizedReturn>() {
+      //   @Override
+      //   public int compare(AnnualizedReturn annRet1, AnnualizedReturn annRet2) {
+      //     return (annRet2.getAnnualizedReturn() < annRet1.getAnnualizedReturn() ? -1 : 
+      //     (annRet2.getAnnualizedReturn() == annRet1.getAnnualizedReturn() ? 0 : 1)); 
+      //   }
+      // });
+      return annualizedReturns;
+  }
+
+
   public static void main(String[] args) throws Exception {
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     ThreadContext.put("runId", UUID.randomUUID().toString());
 
-    printJsonObject(mainCalculateSingleReturn(args));
-
-
+    printJsonObject(mainCalculateReturnsAfterRefactor(args));
   }
 }
 

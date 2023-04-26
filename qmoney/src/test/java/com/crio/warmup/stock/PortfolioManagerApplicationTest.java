@@ -42,7 +42,7 @@ class PortfolioManagerApplicationTest {
 
     //when
     List<String> actual = PortfolioManagerApplication
-        .mainReadQuotes(new String[]{filename, "2019-12-12"});
+        .mainReadQuotes(new String[]{filename, "2019-12-19"});
 
     //then
     Assertions.assertEquals(expected, actual);
@@ -98,6 +98,24 @@ class PortfolioManagerApplicationTest {
   public void testDebugValues() {
     List<String> responses = PortfolioManagerApplication.debugOutputs();
     Assertions.assertTrue(responses.get(0).contains("trades.json"));
+  }
+
+  @Test
+  void testCalculateAnnualReturnFromPortfoliaManager() throws Exception {
+    //given
+    String filename = "trades.json";
+    //when
+    List<AnnualizedReturn> result = PortfolioManagerApplication
+        .mainCalculateReturnsAfterRefactor(new String[]{filename, "2019-12-12"});
+
+    //then
+    List<String> symbols = result.stream().map(AnnualizedReturn::getSymbol)
+        .collect(Collectors.toList());
+    Assertions.assertEquals(0.814, result.get(0).getAnnualizedReturn(), 0.01);
+    Assertions.assertEquals(0.584, result.get(1).getAnnualizedReturn(), 0.01);
+    Assertions.assertEquals(0.33, result.get(2).getAnnualizedReturn(),0.01);
+    Assertions.assertEquals(Arrays.asList(new String[]{"AAPL", "MSFT", "GOOGL"}), symbols);
+
   }
 
 }

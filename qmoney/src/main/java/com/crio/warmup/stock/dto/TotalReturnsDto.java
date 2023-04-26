@@ -31,5 +31,5 @@ public class TotalReturnsDto implements Comparable<TotalReturnsDto> {
   public int compareTo(TotalReturnsDto totRet) {          
     return (this.getClosingPrice() < totRet.getClosingPrice() ? -1 : 
             (this.getClosingPrice() == totRet.getClosingPrice() ? 0 : 1));     
-  } 
+  }
 }
