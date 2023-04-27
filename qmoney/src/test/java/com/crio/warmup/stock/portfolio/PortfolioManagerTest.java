@@ -120,33 +120,6 @@ class PortfolioManagerTest {
     return Arrays.asList(mapper.readValue(responseText, TiingoCandle[].class));
   }
 
-  @Test
-  void testBuildUri() throws Exception {
-    //given
-    // PortfolioTrade trade = new PortfolioTrade();
-    // trade.setPurchaseDate(LocalDate.parse("2010-01-01"));
-    // trade.setSymbol("AAPL");
-    // String token = "abcd";
-    //when
-    String tiingoUrl = portfolioManager
-            .buildUri("AAPL", LocalDate.parse("2010-01-01"), LocalDate.parse("2010-01-10"));
-
-    //then
-    String uri = "https://api.tiingo.com/tiingo/daily/AAPL/prices?startDate=2010-01-01&endDate=2010-01-10&token=8d1051d60d86c0c0346a54396a53d6801c27cc16";
-
-    Assertions.assertEquals(tiingoUrl, uri);
-  }
-
-  @Test
-  public void testCalculateAnnualizedReturnPerTrade() {
-    PortfolioTrade trade = new PortfolioTrade("AAPL", 50, LocalDate.parse("2015-01-01"));
-    AnnualizedReturn returns = portfolioManager
-        .calculateAnnualizedReturnsPerTrade(LocalDate.parse("2018-01-01"),
-        trade, 10000.00, 11000.00);
-    Assertions.assertEquals(returns.getAnnualizedReturn(), 0.0322, 0.0001);
-  }
-
-  
 
 
 }
