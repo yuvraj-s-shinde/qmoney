@@ -9,6 +9,7 @@ import com.crio.warmup.stock.dto.AnnualizedReturn;
 import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.PortfolioTrade;
 import com.crio.warmup.stock.dto.TiingoCandle;
+import com.crio.warmup.stock.quotes.StockQuotesService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -31,11 +32,17 @@ public class PortfolioManagerImpl implements PortfolioManager {
 
 
   RestTemplate restTemplate;
+  StockQuotesService stockQuotesService;
 
   // Caution: Do not delete or modify the constructor, or else your build will break!
   // This is absolutely necessary for backward compatibility
+
   protected PortfolioManagerImpl(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
+  }
+
+  protected PortfolioManagerImpl(StockQuotesService stockQuotesService) {
+    this.stockQuotesService = stockQuotesService;
   }
 
 
@@ -58,7 +65,7 @@ public class PortfolioManagerImpl implements PortfolioManager {
     ArrayList<AnnualizedReturn> annualizedReturns = new ArrayList<>();
     for (PortfolioTrade trade : portfolioTrades) {
       try {
-        candles = getStockQuote(trade.getSymbol(), trade.getPurchaseDate(), endDate);
+        candles = this.stockQuotesService.getStockQuote(trade.getSymbol(), trade.getPurchaseDate(), endDate);
         AnnualizedReturn annualizedReturn = calculateAnnualizedReturnsPerTrade(endDate, trade, 
         PortfolioManagerApplication.getOpeningPriceOnStartDate(candles), PortfolioManagerApplication.getClosingPriceOnEndDate(candles));
         annualizedReturns.add(annualizedReturn);
@@ -94,16 +101,17 @@ public class PortfolioManagerImpl implements PortfolioManager {
   public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to)
       throws JsonProcessingException {
     // RestTemplate restTemplate = new RestTemplate();
-    TiingoCandle[] candles;
-    List<Candle> candleList = new ArrayList<>();
-    candles = this.restTemplate.getForObject(
-      buildUri(symbol, from, to),
-        TiingoCandle[].class);
-    for (TiingoCandle candle : candles) {
-      // Add each element into the list
-      candleList.add(candle);
-    }
-    return candleList;
+    return stockQuotesService.getStockQuote(symbol, from, to);
+    // TiingoCandle[] candles;
+    // List<Candle> candleList = new ArrayList<>();
+    // candles = this.restTemplate.getForObject(
+    //   buildUri(symbol, from, to),
+    //     TiingoCandle[].class);
+    // for (TiingoCandle candle : candles) {
+    //   // Add each element into the list
+    //   candleList.add(candle);
+    // }
+    // return candleList;
   }
 
   protected String buildUri(String symbol, LocalDate startDate, LocalDate endDate) {
@@ -112,4 +120,12 @@ public class PortfolioManagerImpl implements PortfolioManager {
       String uriTemplate = MessageFormat.format(uriTemplateWithTokens, symbol, startDate, endDate, PortfolioManagerApplication.getToken());
       return uriTemplate;
   }
+
+
+  // ¶TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
+  //  Modify the function #getStockQuote and start delegating to calls to
+  //  stockQuoteService provided via newly added constructor of the class.
+  //  You also have a liberty to completely get rid of that function itself, however, make sure
+  //  that you do not delete the #getStockQuote function.
+
 }
